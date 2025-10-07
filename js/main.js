@@ -1,23 +1,36 @@
-// Funcionalidad para el botón de modo oscuro
-const themeToggle = document.getElementById("theme-toggle");
-const themeIcon = themeToggle.querySelector("i");
+// Función del Modo Oscuro
+document.addEventListener("DOMContentLoaded", function () {
+    const themeToggle = document.getElementById("theme-toggle");
+    themeToggle.className = "theme-toggle btn";
+    themeToggle.innerHTML = `
+        <i class="fa-solid fa-sun"></i>
+        <i class="fa-solid fa-moon"></i>
+    `;
 
-themeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-
-    if (document.body.classList.contains("dark-mode")) {
-        themeIcon.classList.remove("fa-moon");
-        themeIcon.classList.add("fa-sun");
-        themeToggle.setAttribute("aria-label", "Toggle light mode");
-    } else {
-        themeIcon.classList.remove("fa-sun");
-        themeIcon.classList.add("fa-moon");
-        themeToggle.setAttribute("aria-label", "Toggle dark mode");
+    const buttonsContainer = document.querySelector(".buttons");
+    if (buttonsContainer) {
+        buttonsContainer.prepend(themeToggle);
     }
 
-    // Guardar preferencia en localStorage
-    const isDarkMode = document.body.classList.contains("dark-mode");
-    localStorage.setItem("darkMode", isDarkMode);
+    const savedTheme = localStorage.getItem("theme");
+    const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    ).matches;
+
+    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
+        document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+        document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    themeToggle.addEventListener("click", function () {
+        const currentTheme =
+            document.documentElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "light" ? "dark" : "light";
+
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+    });
 });
 
 // Cargar preferencia guardada
@@ -59,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Cerrar modal
     closeBtn.addEventListener("click", function () {
         modal.style.display = "none";
-        document.body.style.overflow = "auto"; // Permitir scroll nuevamente
+        document.body.style.overflow = "auto";
     });
 
     // Cerrar modal al hacer clic fuera de la imagen
@@ -164,4 +177,29 @@ contactForms.forEach(function (contactForm) {
                 alert("Failed to send message. Please try again.");
             });
     });
+});
+
+// Mensaje de Emoji
+const catButton = document.getElementById("catButton");
+const catMessage = document.getElementById("catMessage");
+
+catButton.addEventListener("click", () => {
+    if (
+        catMessage.style.display === "none" ||
+        catMessage.style.display === ""
+    ) {
+        catMessage.style.display = "block";
+        catMessage.textContent = "¡Miau!";
+        catButton.textContent = "😸";
+        catMessage.classList.add("fade-in");
+        catMessage.addEventListener(
+            "animationend",
+            () => {
+                catMessage.classList.remove("fade-in");
+            },
+            { once: true }
+        );
+    } else {
+        catMessage.style.display = "none";
+    }
 });

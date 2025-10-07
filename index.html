@@ -21,7 +21,7 @@
 
 <body>
     <!-- Header -->
-    <header class="header" role="heading">
+    <header class="header" role="heading" aria-level="1">
         <div class="header-content">
             <a href="/" class="logo">
                 <img src="assets/img/favicon.png" alt="Logo" width="30" height="30" loading="lazy">
@@ -43,7 +43,6 @@
             </div>
             <nav class="buttons">
                 <button id="theme-toggle" class="btn">
-                    <i class="fa-solid fa-moon"></i>
                 </button>
                 <a href="#" class="btn primary">
                     <i class="ri-github-fill"></i>
@@ -204,7 +203,7 @@
                             </div>
                         </div>
                         <div class="gallery-card">
-                            <img src="assets/img/gato_thomy_caricia.jpg" alt="Thomy jugando en el mueble" loading="lazy">
+                            <img src="assets/img/gato_thomy_jugando.jpg" alt="Thomy jugando en el mueble" loading="lazy">
                             <div class="card-label">
                                 <h4 class="catName">Thomy</h4>
                                 <p class="catDate">Thomy jugando en el mueble.</p>
@@ -249,17 +248,34 @@
     <!-- Footer Section -->
     <footer class="footer-section">
         <div class="footer-content">
-            <p>&copy; 2025 AntonyPss. Todos los derechos reservados.</p>
+            <div class="copyright">
+                <a href="#home" class="logo">
+                    <img src="assets/img/favicon.png" alt="Logo" width="30" height="30" loading="lazy">
+                    <span>Gatos de Antony</span>
+                </a>
+                <p>&copy; 2025 AntonyPss. Todos los derechos reservados.</p>
+                <p>Hecho con <i class="ri-heart-fill" style="color: #9a031e;"></i> por Antony.</p>
+            </div>
+            <div class="cat-icon">
+                <button id="catButton" class="cat-icon-btn">😺</button>
+                <span id="catMessage" class="cat-icon-text"></span>
+            </div>
             <nav class="socials">
-                <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
-                    <i class="fa-brands fa-facebook"></i>
-                </a>
-                <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="https://www.twitter.com" target="_blank" aria-label="Twitter">
-                    <i class="fa-brands fa-twitter"></i>
-                </a>
+                <h3>Redes sociales</h3>
+                <section class="socials-link">
+                    <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
+                        <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://www.twitter.com" target="_blank" aria-label="Twitter">
+                        <i class="fa-brands fa-twitter"></i>
+                    </a>
+                    <a href="https://discord.com" target="_blank" aria-label="Discord">
+                        <i class="fa-brands fa-discord"></i>
+                    </a>
+                </section>
             </nav>
         </div>
     </footer>
