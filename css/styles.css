@@ -99,19 +99,27 @@ body {
 /* -- Header Bar -- */
 .header {
     display: flex;
+    position: sticky;
+    top: 0;
+    left: 0;
     border-bottom: 1px solid var(--border-color);
     width: 100%;
-    background-color: var(--bg-color);
+    height: auto;
+    /* background-color: var(--bg-color); */
+    backdrop-filter: blur(10px);
     transition: var(--transition-all);
+    z-index: 1000;
 }
 
 .header-content {
     display: flex;
     justify-content: space-between;
-    padding: 14px 10px;
-    max-width: 1200px;
+    align-items: center;
+    padding: 14px 20px;
     width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
+    flex-wrap: wrap;
 }
 
 .logo {
@@ -148,7 +156,7 @@ body {
     display: flex;
     justify-self: center;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     width: auto;
 }
 
@@ -221,6 +229,10 @@ body {
 }
 
 /* Welcome Section */
+main {
+    padding: 0 20px;
+}
+
 .welcome-section {
     display: flex;
 }
@@ -297,7 +309,6 @@ body {
 .grid-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: minmax(1fr, auto);
     gap: 20px;
 }
 
@@ -349,15 +360,22 @@ body {
 }
 
 .gallery-section-box h3 {
-    margin: 10px 0;
+    font-size: 24px;
+    margin: 20px 0;
     color: var(--dark-text-color);
+    text-align: center;
 }
 
 .gallery-grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-template-rows: minmax(200px, auto);
     gap: 10px;
+    justify-content: center;
+    justify-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .gallery-card {
@@ -368,6 +386,7 @@ body {
     border-radius: var(--radius-large);
     width: 270px;
     height: auto;
+    overflow: hidden;
     transition: var(--transition-all);
     background-color: var(--bg-color);
 }
@@ -377,7 +396,17 @@ body {
     object-fit: cover;
     border-radius: var(--radius-large);
     width: 100%;
-    height: 270px;
+    height: 200px;
+    transition: var(--transition-all);
+}
+
+.gallery-card img.lazy {
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+}
+
+.gallery-card img:not(.lazy) {
+    filter: blur(0);
 }
 
 .gallery-card:hover {
@@ -722,46 +751,75 @@ body {
 }
 
 /* Media Queries */
-@media (max-width: 470px) {
-    .footer-content {
-        display: flex;
-        flex-direction: column-reverse;
-        padding: 14px 10px;
-    }
-
-    .footer-content .copyright,
-    .footer-content .logo,
-    .cat-icon,
-    .socials {
-        justify-self: center;
-        align-items: center;
-    }
-
-    .footer-content .cat-icon-text {
-        bottom: 2cm;
-    }
-
+/* Tablets y dispositivos medianos (768px - 1023px) */
+@media (max-width: 1023px) {
     .header-content {
         flex-direction: column;
         align-items: center;
         gap: 10px;
         padding: 10px;
     }
+
+    .labels h1 {
+        font-size: 2.8rem;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .gallery-grid-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .footer-content .copyright,
+    .footer-content .socials {
+        justify-self: center;
+    }
 }
 
-@media (max-width: 600px) {
-    .header-content {
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
+/* Tablets pequeñas y móviles grandes (600px - 767px) */
+@media (max-width: 767px) {
+    .labels h1 {
+        font-size: 2.4rem;
+    }
+
+    .labels p {
+        font-size: 0.9rem;
+    }
+
+    .grid-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 
     .gallery-grid-container {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .modal-nav {
-        padding: 0 10px;
+    .gallery-card {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .about-cat-card img {
+        height: 250px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .modal-image {
+        max-height: 50vh;
     }
 
     .nav-btn {
@@ -771,56 +829,19 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+/* Móviles (470px - 599px) */
+@media (max-width: 599px) {
     .header-content {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding: 10px;
-    }
-
-    .gallery-grid-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .gallery-card {
-        width: 100%;
-        padding: 10px;
-    }
-
-    .gallery-card img {
-        height: 200px;
-    }
-
-    .about-cat-box h3 {
-        font-size: 1.2rem;
-    }
-
-    .about-cat-card img {
-        height: 200px;
-    }
-
-    .labels h1 {
-        font-size: 2.4rem;
-    }
-
-    .labels p {
-        font-size: 0.9rem;
-    }
-
-    .buttons .btn {
-        padding: 8px 10px;
-        font-size: 12px;
-    }
-
-    .buttons .btn i {
-        width: 14px;
-        height: 14px;
-        font-size: 14px;
+        padding: 8px;
     }
 
     .logo span {
         font-size: 16px;
+    }
+
+    .links {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .links a {
@@ -828,88 +849,154 @@ body {
         padding: 8px 10px;
     }
 
-    .main-container {
+    .buttons .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .labels h1 {
+        font-size: 2rem;
         padding: 0 10px;
     }
 
-    .header-content {
-        padding: 10px 0;
+    .labels p {
+        font-size: 0.85rem;
+        padding: 0 10px;
     }
 
-    .welcome-section {
-        padding: 20px 0;
-    }
-
-    .about-box {
+    .about-box,
+    .contact-box {
         padding: 20px;
     }
 
-    .about-cat-card img {
-        width: 280px;
+    .gallery-grid-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
 
-    .about-cat-card {
-        gap: 5px;
-    }
-
-    .about-cat-card img {
-        height: 180px;
-    }
-
-    .card-info h4 {
-        font-size: 18px;
-    }
-
-    .card-info p {
-        font-size: 13px;
-    }
-
-    .footer-content {
-        align-items: center;
-        text-align: center;
-        gap: 10px;
-    }
-
-    .footer-content p {
-        font-size: 13px;
-    }
-
-    .socials a {
-        padding: 8px;
-    }
-
-    .modal-content {
-        width: 90%;
-    }
-
-    .modal-image {
-        max-height: 50vh;
-    }
-
-    .modal-info .item-name {
-        font-size: 1.2rem;
-    }
-
-    .modal-info .item-date {
-        font-size: 0.9rem;
+    .gallery-card {
+        max-width: 100%;
     }
 }
 
-@media (min-width: 1024px) {
+/* Móviles pequeños (hasta 469px) */
+@media (max-width: 469px) {
+    .labels h1 {
+        font-size: 1.8rem;
+    }
+
+    .logo span {
+        font-size: 14px;
+    }
+
+    .links {
+        gap: 5px;
+    }
+
+    .links a {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+
+    .buttons {
+        gap: 5px;
+    }
+
+    .buttons .btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .buttons .btn span {
+        display: none;
+    }
+
+    .buttons .btn i {
+        margin: 0;
+    }
+
+    .about-cat-card img {
+        height: 200px;
+    }
+
+    .gallery-card img {
+        height: 180px;
+    }
+
+    .footer-content {
+        padding: 15px 10px;
+        gap: 15px;
+    }
+
+    .footer-content .cat-icon-text {
+        bottom: 1.5cm;
+    }
+
+    .modal-nav {
+        padding: 0 5px;
+    }
+
+    .nav-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+
+    .close {
+        top: 10px;
+        right: 20px;
+        font-size: 30px;
+    }
+}
+
+/* Pantallas muy grandes (más de 1200px) */
+@media (min-width: 1200px) {
+
+    .header-content,
+    .main-container {
+        max-width: 1200px;
+    }
+
+    .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .gallery-grid-container {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .header {
+        position: relative;
+    }
+
+    .labels {
+        padding: 20px 0;
+    }
+
+    .labels h1 {
+        font-size: 2rem;
+    }
+
     .modal-content {
-        width: 80%;
+        margin: 2% auto;
     }
 
     .modal-image {
         max-height: 60vh;
     }
+}
 
-    .modal-info .item-name {
-        font-size: 1.5rem;
+/* Para móviles muy pequeños, oculta el texto del logo */
+@media (max-width: 380px) {
+    .logo span {
+        display: none;
     }
 
-    .modal-info .item-date {
-        font-size: 1rem;
+    .links a span {
+        font-size: 12px;
     }
 }
 

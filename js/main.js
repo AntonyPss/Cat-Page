@@ -12,23 +12,45 @@ document.addEventListener("DOMContentLoaded", function () {
         buttonsContainer.prepend(themeToggle);
     }
 
+    // Obtener referencias a los íconos
+    const sunIcon = themeToggle.querySelector(".fa-sun");
+    const moonIcon = themeToggle.querySelector(".fa-moon");
+
+    // Cargar tema guardado
     const savedTheme = localStorage.getItem("theme");
     const systemPrefersDark = window.matchMedia(
         "(prefers-color-scheme: dark)"
     ).matches;
 
-    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
-        document.documentElement.setAttribute("data-theme", "dark");
-    } else {
-        document.documentElement.setAttribute("data-theme", "light");
+    function applyTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+
+        // Actualizar íconos
+        if (theme === "dark") {
+            sunIcon.style.display = "none";
+            moonIcon.style.display = "inline-flex";
+            themeToggle.setAttribute("aria-label", "Cambiar a modo claro");
+        } else {
+            sunIcon.style.display = "inline-flex";
+            moonIcon.style.display = "none";
+            themeToggle.setAttribute("aria-label", "Cambiar a modo oscuro");
+        }
     }
 
+    // Aplicar tema inicial
+    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
+        applyTheme("dark");
+    } else {
+        applyTheme("light");
+    }
+
+    // Alternar tema al hacer clic
     themeToggle.addEventListener("click", function () {
         const currentTheme =
             document.documentElement.getAttribute("data-theme");
         const newTheme = currentTheme === "light" ? "dark" : "light";
 
-        document.documentElement.setAttribute("data-theme", newTheme);
+        applyTheme(newTheme);
         localStorage.setItem("theme", newTheme);
     });
 });
@@ -39,9 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (savedDarkMode) {
         document.body.classList.add("dark-mode");
-        themeIcon.classList.remove("fa-moon");
-        themeIcon.classList.add("fa-sun");
-        themeToggle.setAttribute("aria-label", "Toggle light mode");
     }
 });
 
@@ -54,6 +73,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeBtn = document.querySelector(".close");
     const prevBtn = document.querySelector(".prev");
     const nextBtn = document.querySelector(".next");
+
+    initLazyLoading();
+    enhanceLazyLoading();
 
     // Obtener todas las imágenes de la galería
     const galleryItems = document.querySelectorAll(".gallery-card");
@@ -135,6 +157,109 @@ document.addEventListener("DOMContentLoaded", function () {
         modalDate.textContent = date;
     }
 });
+
+// Galería de Imágenes
+let currentPage = 1;
+const itemsPerPage = 8;
+// Mejorar el lazy loading
+function enhanceLazyLoading() {
+    // Opción 1: Solo imágenes dentro de .gallery-grid-container
+    const galleryImages = document.querySelectorAll(
+        '.gallery-grid-container img[loading="lazy"]'
+    );
+
+    // Opción 2: Solo imágenes de tarjetas de galería
+    // const galleryImages = document.querySelectorAll('.gallery-card img');
+
+    galleryImages.forEach((img) => {
+        if (!img.hasAttribute("data-src")) {
+            img.setAttribute("data-src", img.src);
+
+            // Solo aplicar estilos a imágenes de galería (no al logo)
+            if (img.closest(".gallery-card")) {
+                img.style.backgroundColor = "#f0f0f0";
+                img.style.minHeight = "200px";
+
+                img.onload = function () {
+                    this.style.backgroundColor = "transparent";
+                };
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const lazyImage = entry.target;
+                        if (lazyImage.getAttribute("data-src")) {
+                            lazyImage.src = lazyImage.getAttribute("data-src");
+                            lazyImage.removeAttribute("data-src");
+                        }
+                        observer.unobserve(lazyImage);
+                    }
+                });
+            });
+
+            observer.observe(img);
+        }
+    });
+}
+
+function initLazyLoading() {
+    const lazyImages = document.querySelectorAll(".gallery-card img");
+
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.remove("lazy");
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+
+    lazyImages.forEach((img) => {
+        img.dataset.src = img.src;
+        img.src =
+            "https://cdn.jsdelivr.net/npm/remixicon@2.5.0/icons/system/loader-3-line.svg"; // Icono de placeholder de Remix Icon
+        imageObserver.observe(img);
+    });
+}
+
+function loadMoreImages() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const allCards = document.querySelectorAll(".gallery-card");
+
+    // Oculta todas las imágenes primero
+    allCards.forEach((card) => (card.style.display = "none"));
+
+    // Muestra solo las de la página actual
+    for (let i = 0; i < endIndex && i < allCards.length; i++) {
+        allCards[i].style.display = "block";
+    }
+}
+
+function initPagination() {
+    const loadMoreBtn = document.createElement("button");
+    loadMoreBtn.textContent = "Cargar más fotos";
+    loadMoreBtn.className = "btn primary";
+    loadMoreBtn.style.margin = "20px auto";
+    loadMoreBtn.style.display = "block";
+
+    loadMoreBtn.addEventListener("click", function () {
+        currentPage++;
+        loadMoreImages();
+
+        // Oculta el botón si no hay más imágenes
+        const totalCards = document.querySelectorAll(".gallery-card").length;
+        if (currentPage * itemsPerPage >= totalCards) {
+            loadMoreBtn.style.display = "none";
+        }
+    });
+
+    document.querySelector(".gallery-grid-container").after(loadMoreBtn);
+    loadMoreImages(); // Carga inicial
+}
 
 // Formulario de contacto
 // form_name
