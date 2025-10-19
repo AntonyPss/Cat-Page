@@ -76,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     initLazyLoading();
     enhanceLazyLoading();
+    initPagination();
 
     // Obtener todas las imágenes de la galería
     const galleryItems = document.querySelectorAll(".gallery-card");
@@ -202,11 +203,10 @@ function enhanceLazyLoading() {
         }
     });
 }
-
 function initLazyLoading() {
     const lazyImages = document.querySelectorAll(".gallery-card img");
 
-    const imageObserver = new IntersectionObserver((entries, observer) => {
+    const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 const img = entry.target;
@@ -219,8 +219,7 @@ function initLazyLoading() {
 
     lazyImages.forEach((img) => {
         img.dataset.src = img.src;
-        img.src =
-            "https://cdn.jsdelivr.net/npm/remixicon@2.5.0/icons/system/loader-3-line.svg"; // Icono de placeholder de Remix Icon
+        img.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i>";
         imageObserver.observe(img);
     });
 }
@@ -242,7 +241,7 @@ function loadMoreImages() {
 function initPagination() {
     const loadMoreBtn = document.createElement("button");
     loadMoreBtn.textContent = "Cargar más fotos";
-    loadMoreBtn.className = "btn primary";
+    loadMoreBtn.className = "load-more-btn";
     loadMoreBtn.style.margin = "20px auto";
     loadMoreBtn.style.display = "block";
 
@@ -276,6 +275,7 @@ const contactForms = document.querySelectorAll(".contact-form");
 const successMessage = document.getElementById("success-message");
 
 // Add form submit event listener to each form
+// Add form submit event listener to each form
 contactForms.forEach(function (contactForm) {
     contactForm.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -289,21 +289,19 @@ contactForms.forEach(function (contactForm) {
         };
 
         // Send email using EmailJS
-        // Replace Service_ID and Template_ID with your EmailJS service and template IDs
         emailjs
             .send("service_vjswj04", "template_7rbsjxj", formData)
-            .then(function (response) {
+            .then(function () {
                 // Show success message
                 successMessage.classList.remove("hidden");
                 event.target.reset();
                 contactForm.reset();
             })
-            .catch(function (error) {
+            .catch(function () {
                 alert("Failed to send message. Please try again.");
             });
     });
 });
-
 // Mensaje de Emoji
 const catButton = document.getElementById("catButton");
 const catMessage = document.getElementById("catMessage");
